@@ -20,7 +20,7 @@
 #define MAX_OIS_NAME_SIZE 32
 #define MAX_OIS_REG_SETTINGS 800
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 #define MAX_PROXY_MOD_NAME_SIZE 32
 #define MAX_PROXY_NAME_SIZE 32
 #define MAX_PROXY_REG_SETTINGS 800
@@ -97,12 +97,10 @@ enum sensor_sub_module_t {
 	SUB_MODULE_CSIPHY_3D,
 	SUB_MODULE_OIS,
 	SUB_MODULE_EXT,
-#ifndef CONFIG_LGE_CAMERA_DRIVER
 	SUB_MODULE_IR_LED,
 	SUB_MODULE_IR_CUT,
-#endif
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 	SUB_MODULE_PROXY,
 	SUB_MODULE_TCS,
 	SUB_MODULE_IRIS,
@@ -239,7 +237,7 @@ struct msm_sensor_info_t {
 	enum camb_position_t position;
 };
 
-#ifdef CONFIG_LG_OIS
+#if 1 /* CONFIG_LG_OIS */
 struct msm_ois_info_t{
 	char ois_provider[MAX_SENSOR_NAME];
 	int16_t gyro[2];
@@ -327,7 +325,6 @@ struct msm_eeprom_info_t {
 	struct msm_eeprom_memory_map_array *mem_map_array;
 };
 
-#ifndef CONFIG_LGE_CAMERA_DRIVER
 struct msm_ir_led_cfg_data_t {
 	enum msm_ir_led_cfg_type_t cfg_type;
 	int32_t pwm_duty_on_ns;
@@ -337,13 +334,12 @@ struct msm_ir_led_cfg_data_t {
 struct msm_ir_cut_cfg_data_t {
 	enum msm_ir_cut_cfg_type_t cfg_type;
 };
-#endif
 
 struct msm_eeprom_cfg_data {
 	enum eeprom_cfg_type_t cfgtype;
 	uint8_t is_supported;
 	union {
-		char eeprom_name[MAX_SENSOR_NAME];
+		char eeprom_name[MAX_EEPROM_NAME];
 		struct eeprom_get_t get_data;
 		struct eeprom_read_t read_data;
 		struct eeprom_write_t write_data;
@@ -379,12 +375,13 @@ enum msm_sensor_cfg_type_t {
 	CFG_SET_AUTOFOCUS,
 	CFG_CANCEL_AUTOFOCUS,
 	CFG_SET_STREAM_TYPE,
+	CFG_GET_SENSER_TEMPERATURE,/*LGE_CHANGE, LG_AF, 2017, By AF Member*/
 	CFG_SET_I2C_SYNC_PARAM,
 	CFG_WRITE_I2C_ARRAY_ASYNC,
 	CFG_WRITE_I2C_ARRAY_SYNC,
 	CFG_WRITE_I2C_ARRAY_SYNC_BLOCK,
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 	CFG_SET_PREVIEW_TUNE_ON,
 	CFG_SET_PREVIEW_TUNE_OFF,
 	CFG_POWER_UP_WITHOUT_TCS,
@@ -410,7 +407,7 @@ struct msm_ois_opcode {
 	uint32_t memory;
 };
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 enum msm_ois_cfg_type_t {
 	CFG_OIS_INIT,
 	CFG_GET_OIS_INFO,
@@ -435,7 +432,7 @@ enum msm_ois_cfg_type_t {
 };
 #endif
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 enum msm_tcs_cfg_type_t {
 	CFG_TCS_INIT,
 	CFG_TCS_ON,
@@ -496,13 +493,13 @@ struct msm_ois_params_t {
 
 struct msm_ois_set_info_t {
 	struct msm_ois_params_t ois_params;
-#ifdef CONFIG_LG_OIS
+#if 1 /* CONFIG_LG_OIS */
 	struct msm_ois_info_t *ois_info;
 	void	*setting;
 #endif
 };
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 enum msm_iris_cfg_type_t {
 	CFG_IRIS_INIT,
 	CFG_IRIS_POWERDOWN,
@@ -647,16 +644,14 @@ struct msm_ois_slave_info {
 };
 struct msm_ois_cfg_data {
 	int cfgtype;
-#ifdef CONFIG_MACH_MSM8996_LUCYE
 	uint16_t eeprom_slave_addr;
-#endif
 	union {
 		struct msm_ois_set_info_t set_info;
 		struct msm_camera_i2c_seq_reg_setting *settings;
 	} cfg;
 };
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 struct msm_tcs_cfg_data {
 	int cfgtype;
 	union {
@@ -745,7 +740,7 @@ struct sensor_init_cfg_data {
 	} cfg;
 };
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 struct msm_tcs_info_t32{
 	uint32_t status;
 	uint32_t clear;
@@ -804,14 +799,19 @@ struct msm_tcs_cfg_data32 {
 #define VIDIOC_MSM_OIS_CFG_DOWNLOAD \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 14, struct msm_ois_cfg_download_data)
 
-#ifndef CONFIG_LGE_CAMERA_DRIVER
 #define VIDIOC_MSM_IR_LED_CFG \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 15, struct msm_ir_led_cfg_data_t)
 
 #define VIDIOC_MSM_IR_CUT_CFG \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 15, struct msm_ir_cut_cfg_data_t)
-#endif
-#ifdef CONFIG_MACH_LGE
+
+#define VIDIOC_MSM_IR_LED_CFG \
+	_IOWR('V', BASE_VIDIOC_PRIVATE + 15, struct msm_ir_led_cfg_data_t)
+
+#define VIDIOC_MSM_IR_CUT_CFG \
+	_IOWR('V', BASE_VIDIOC_PRIVATE + 15, struct msm_ir_cut_cfg_data_t)
+
+#if 1 /* CONFIG_MACH_LGE */
 #define VIDIOC_MSM_PROXY_CFG \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 12, struct msm_proxy_cfg_data)
 

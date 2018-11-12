@@ -33,7 +33,7 @@ struct msm_camera_sensor_slave_info32 {
 	char ois_name[32];
 	char flash_name[32];
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 	char proxy_name[32];
 	char tcs_name[32];
 	char iris_name[32];
@@ -226,7 +226,7 @@ struct msm_ois_params_t32 {
 
 struct msm_ois_set_info_t32 {
 	struct msm_ois_params_t32 ois_params;
-#ifdef CONFIG_LG_OIS
+#if 1 /* CONFIG_LG_OIS */
 	compat_uptr_t ois_info;
 	compat_uptr_t setting;
 #endif
@@ -234,16 +234,14 @@ struct msm_ois_set_info_t32 {
 
 struct msm_ois_cfg_data32 {
 	int cfgtype;
-#ifdef CONFIG_MACH_MSM8996_LUCYE
 	uint16_t eeprom_slave_addr;
-#endif
 	union {
 		struct msm_ois_set_info_t32 set_info;
 		compat_uptr_t settings;
 	} cfg;
 };
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 struct msm_iris_params_t32 {
 	uint16_t data_size;
 	uint16_t setting_size;
@@ -332,7 +330,7 @@ struct msm_flash_cfg_data_t32 {
 #define VIDIOC_MSM_IR_CUT_CFG32 \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 15, struct msm_ir_cut_cfg_data_t32)
 
-#ifdef CONFIG_MACH_LGE
+#if 1 /* CONFIG_MACH_LGE */
 #define VIDIOC_MSM_PROXY_CFG32 \
 	_IOWR('V', BASE_VIDIOC_PRIVATE + 12, struct msm_proxy_cfg_data32)
 
